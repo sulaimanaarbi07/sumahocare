@@ -1,4 +1,4 @@
-# LINE解決ガイド（TechKosupa 姉妹サイト）
+# スマホケア（sumahocare — TechKosupa 姉妹サイト）
 
 iPhone・スマホの **LINEトラブル**（通知・バックアップ・通話・送信）に特化した静的サイトです。
 メインサイト：<https://techkosupa.com/>（テックコスパ）
@@ -21,7 +21,7 @@ iPhone・スマホの **LINEトラブル**（通知・バックアップ・通�
 │   └── line-call-echo.html                             # LINE電話でエコー（反響）する
 └── assets/
     ├── css/style.css                 # 全ページ共通スタイル
-    ├── js/main.js                    # ネイバー/フォーム等のJS
+    ├── js/main.js                    # ナビゲーション/フォーム等のJS
     └── img/                          # 各記事のイラスト
 ```
 
@@ -36,6 +36,13 @@ iPhone・スマホの **LINEトラブル**（通知・バックアップ・通�
 | エコー（反響）する | line電話 自分の声が反響する |
 
 各記事内からは、メインサイト（テックコスパ）の深掘り記事へリンクしています。
+
+## Google Search Console
+
+サイト所有権確認メタタグ：
+```html
+<meta name="google-site-verification" content="AxP508XUdTfS3u-azYbc-wlClozxaHhvm2d45rFyWAY">
+```
 
 ## コンテンツを更新するには
 
@@ -55,7 +62,7 @@ iPhone・スマホの **LINEトラブル**（通知・バックアップ・通�
 git pull origin main
 # ファイルを編集
 git add -A
-git commit -m "Update: LINE通知記事を更新"
+git commit -m "Update: 記事を更新"
 git push origin main
 ```
 
@@ -95,10 +102,6 @@ GitHubに push するたびに自動で再デプロイされます。
 - **Firebase Hosting** → `*.web.app`
 - **GitLab Pages** → `*.gitlab.io`
 - **Render** → `*.onrender.com`
-
-※ すべて「自分のドメイン」ではなく **運営会社のドメインのサブドメイン**です。
-   `line-guide.com` のような独自ドメインは約10〜15ドル/年で取得し、
-   上記どこにも無料で接続できます。
 
 ## 備考
 
