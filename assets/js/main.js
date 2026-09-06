@@ -1,4 +1,4 @@
-// LINE 解決ガイド — small utilities (no frameworks)
+// スマホケア (sumahocare) — small utilities (no frameworks)
 
 document.addEventListener("DOMContentLoaded", function () {
   // Mobile nav
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var mail = (form.email.value || "").trim();
       var topic = form.topic.value || "";
       var msg = (form.message.value || "").trim();
-      var subject = "【" + (topic || "お問い合わせ") + "】からのメッセージ" + (name ? "（" + name + "）" : "");
+      var subject = "【" + (topic || "スマホケア お問い合わせ") + "】からのメッセージ" + (name ? "（" + name + "）" : "");
       var body =
         "メッセージ：\n" + msg + "\n\n" +
         "-------- 送信者情報 --------\n" +
@@ -53,15 +53,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var y = document.querySelector("[data-year]");
   if (y) y.textContent = String(new Date().getFullYear());
 
-  // Active nav link highlight (based on path)
-  var path = location.pathname.replace(/index\.html$/, "");
+  // Active nav link highlight (based on current page)
+  var currentFile = (location.pathname.split("/").pop() || "index.html").replace(".html", "");
+  if (!currentFile || currentFile === "") currentFile = "index";
   document.querySelectorAll(".main-nav a").forEach(function (a) {
-    var href = a.getAttribute("href");
-    if (!href) return;
-    var isHome = href === "/" || href === "index.html";
-    if (isHome && (path === "/" || path.endsWith("/") || path.endsWith("index.html"))) {
-      a.classList.add("active");
-    } else if (!isHome && (href === path || href.replace(".html", "") === path.replace(".html", ""))) {
+    var href = a.getAttribute("href") || "";
+    if (href.indexOf("#") !== -1) return;
+    var linkFile = (href.split("/").pop() || "").replace(".html", "");
+    if (linkFile === currentFile) {
       a.classList.add("active");
     }
   });
