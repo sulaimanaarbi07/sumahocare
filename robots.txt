@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sulaimanaarbi07.github.io/sumahocare/sitemap.xml
+Sitemap: https://sumahocare.pages.dev/sitemap.xml
