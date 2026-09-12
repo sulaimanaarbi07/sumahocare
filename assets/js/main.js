@@ -54,13 +54,16 @@ document.addEventListener("DOMContentLoaded", function () {
   if (y) y.textContent = String(new Date().getFullYear());
 
   // Active nav link highlight (based on current page)
-  var currentFile = (location.pathname.split("/").pop() || "index.html").replace(".html", "");
-  if (!currentFile || currentFile === "") currentFile = "index";
+  // 拡張子なしURL（/about, /articles/xxx）と .html 付きURLの両方に対応
+  function pageName(path) {
+    var last = (path.split("#")[0].split("?")[0].split("/").pop() || "").replace(/\.html$/, "");
+    return last === "" ? "index" : last; // "/" と "/index.html" はホーム扱い
+  }
+  var currentFile = pageName(location.pathname);
   document.querySelectorAll(".main-nav a").forEach(function (a) {
     var href = a.getAttribute("href") || "";
     if (href.indexOf("#") !== -1) return;
-    var linkFile = (href.split("/").pop() || "").replace(".html", "");
-    if (linkFile === currentFile) {
+    if (pageName(href) === currentFile) {
       a.classList.add("active");
     }
   });

@@ -3,6 +3,31 @@
 iPhone・スマホの **LINEトラブル**（通知・バックアップ・通話・送信）に特化した静的サイトです。
 メインサイト：<https://techkosupa.com/>（テックコスパ）
 
+## 公開URL（サイトマップの基準URL）
+
+**公開中：<https://sumahocare.pages.dev/>**（Cloudflare Pages）
+
+サイトマップ・`robots.txt`・canonical・OGP はすべてこのURLを基準にしています。
+
+| ページ | 正規URL（canonical） |
+|---|---|
+| ホーム | `https://sumahocare.pages.dev/` |
+| 運営者情報 | `https://sumahocare.pages.dev/about` |
+| お問い合わせ | `https://sumahocare.pages.dev/contact` |
+| 記事 | `https://sumahocare.pages.dev/articles/<ファイル名から .html を除いたもの>` |
+| サイトマップ | `https://sumahocare.pages.dev/sitemap.xml` |
+
+### URLのルール（重要）
+
+- **Cloudflare Pages は `.html` 付きURLを拡張子なしURLへ 308 リダイレクトします。**
+  （例：`/about.html` → `/about`）
+  そのため、正規URLは **拡張子なし** とし、`sitemap.xml` にも拡張子なしURLだけを記載します。
+- **サイト内リンク・アセットはすべてルート相対（`/about`、`/assets/...`）で記述します。**
+  サブディレクトリ配下（例：`/sumahocare/`）に置くとリンクが壊れるので、
+  このサイトは必ず **ドメイン直下**で公開してください。
+- ファイルは今までどおり `about.html` のように `.html` を付けて保存して構いません
+  （保存するファイル名と、公開URLが違うだけです）。
+
 ## サイト構成
 
 ```
@@ -10,7 +35,7 @@ iPhone・スマホの **LINEトラブル**（通知・バックアップ・通�
 ├── index.html                        # ホーム（記事一覧・自己紹介）
 ├── about.html                        # 運営者情報（スライマン）
 ├── contact.html                      # お問い合わせ（aarbi@mail.com）
-├── sitemap.xml                       # サイトマップ（GitHub Pages のURL使用）
+├── sitemap.xml                       # サイトマップ（https://sumahocare.pages.dev/ のURL・拡張子なし）
 ├── robots.txt
 ├── favicon.svg
 ├── articles/
@@ -71,22 +96,17 @@ git push origin main
 1. `articles/` に、既存の記事HTMLをコピーして名前を変える
    （例：`line-new-topic.html`）
 2. `<title>`・メタdescription・本文・目次を更新
-3. `index.html` の記事一覧（`<div class="card-grid">` 内）にカードを追加
-4. `sitemap.xml` に新しいURLを追加
-5. 必要なら `assets/img/` に画像を追加
+3. `<head>` の **canonical / `og:url` / `og:image`** と、JSON-LD内のURLを新しいページのものに更新
+   （例：`<link rel="canonical" href="https://sumahocare.pages.dev/articles/line-new-topic">`）
+   ※ 拡張子 `.html` は付けない
+4. `index.html` の記事一覧（`<div class="card-grid">` 内）にカードを追加
+   （リンクは `/articles/line-new-topic` のようにルート相対・拡張子なしで書く）
+5. `sitemap.xml` に新しいURLを追加（`<loc>` は拡張子なし、`<lastmod>` は公開日）
+6. 必要なら `assets/img/` に画像を追加
 
 ## ホスティング（無料）
 
-### 1) GitHub Pages（このリポジトリでそのまま使える）
-
-1. GitHub → **Settings → Pages**
-2. 「Deploy from a branch」→ ブランチを **main**、フォルダを **/ (root)** にして Save
-3. 数分で `https://sulaimanaarbi07.github.io/sumahocare/` が公開される
-
-> ⚠️ 公開URLが変わったら、`sitemap.xml` と `robots.txt`、各HTMLの
-> `<meta property="og:url">` / `og:image` のURLも合わせて更新してください。
-
-### 2) Cloudflare Pages（*.pages.dev、無料で帯域無制限）
+### 1) Cloudflare Pages（現在の公開先 / 推奨）
 
 1. <https://dash.cloudflare.com/sign-up> にアカウント作成
 2. **Workers & Pages → Create → Pages → Connect to Git**
@@ -94,6 +114,27 @@ git push origin main
 4. Deploy → `https://サイト名.pages.dev` で公開
 
 GitHubに push するたびに自動で再デプロイされます。
+初回に一度作った後は、`main` にマージするだけで <https://sumahocare.pages.dev/> が更新されます。
+
+> ⚠️ Cloudflare Pages は `.html` を自動で外す挙動（308リダイレクト）があるため、
+> `sitemap.xml`・canonical・サイト内リンクは **拡張子なしURL** で統一してください。
+
+### 2) GitHub Pages（現在は未設定・404）
+
+1. GitHub → **Settings → Pages**
+2. 「Deploy from a branch」→ ブランチを **main**、フォルダを **/ (root)** にして Save
+3. 数分で `https://sulaimanaarbi07.github.io/sumahocare/` が公開される
+
+> ⚠️ GitHub Pages は Cloudflare Pages と違い **`.html` を外しません**（`/about.html` が
+> そのまま表示されます）。またこのサイトは**ドメイン直下**を前提にしたルート相対リンク
+> （`/about` など）を使っているため、`/sumahocare/` のようなサブディレクトリ配下で
+> 公開するとリンクが壊れます。GitHub Pages を使う場合は、独自ドメインを設定して
+> ドメイン直下で公開するか、`sitemap.xml`・canonical・内部リンクをすべて
+> `https://sulaimanaarbi07.github.io/sumahocare/...`（`.html` 付き）に戻してください。
+
+> ⚠️ 公開URL（ドメイン）が変わったら、次の4か所をすべて合わせて更新してください。
+> `sitemap.xml` / `robots.txt` / 各HTMLの `<link rel="canonical">` /
+> `<meta property="og:url">`・`og:image`・JSON-LD のURL
 
 ### 3) その他（無料でサブドメインをくれるもの）
 
